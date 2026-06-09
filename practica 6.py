@@ -1,0 +1,48 @@
+from machine import Pin, PWM
+import time
+
+# Configurar el buzzer en el pin 10
+buzzer = PWM(Pin(10))
+
+# --- 1. Definir las frecuencias de las notas musicales ---
+# Basado en la frecuencia estándar de La4 = 440Hz
+TONES = {
+    'B4': 494, 'C5': 523, 'CS5': 554, 'D5': 587, 'DS5': 622,
+    'E5': 659, 'F5': 698, 'FS5': 740, 'G5': 784, 'GS5': 831,
+    'A5': 880, 'AS5': 932, 'B5': 988, 'C6': 1047, 'R': 0
+}
+
+# --- 2. "Traducir" la canción a notas y duraciones ---
+# Formato: (nota, duración_en_segundos)
+melody = [
+    ('C5', 0.4), ('C5', 0.4), ('D5', 0.8), ('C5', 0.8), ('F5', 0.8), ('E5', 1.6),
+    ('C5', 0.4), ('C5', 0.4), ('D5', 0.8), ('C5', 0.8), ('G5', 0.8), ('F5', 1.6),
+    ('C5', 0.4), ('C5', 0.4), ('C6', 0.8), ('A5', 0.8), ('F5', 0.8), ('E5', 0.8), ('D5', 1.6),
+    ('AS5', 0.4), ('AS5', 0.4), ('A5', 0.8), ('F5', 0.8), ('G5', 0.8), ('F5', 1.6)
+]
+
+
+# --- 3. Función para tocar la melodía ---
+def play_melody():
+    print("🎵 Reproduciendo canción...")
+    for note_name, duration in melody:
+        frequency = TONES.get(note_name, 0)
+        if frequency > 0:
+            buzzer.freq(frequency)  # Establece la frecuencia del tono
+            buzzer.duty_u16(30000)  # Enciende el buzzer (volumen)
+        else:
+            buzzer.duty_u16(0)  # Silencio para la nota 'R'
+
+        # Espera durante la duración de la nota
+        time.sleep(duration)
+
+        # Pequeña pausa entre notas para separarlas
+        buzzer.duty_u16(0)
+        time.sleep(0.05)
+
+    buzzer.duty_u16(0)
+    print("✅ Canción terminada.")
+
+
+# Ejecutar el reproductor
+play_melody()
