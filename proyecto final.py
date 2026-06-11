@@ -1,16 +1,27 @@
-# This is a sample Python script.
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# 1. Definir los datos recolectados de las pruebas (Simulación de 50 eventos)
+data = {
+    'Distancia_cm': [10, 15, 20, 25, 30, 40, 50, 60],
+    'Tiempo_Respuesta_ms': [12, 11, 13, 12, 14, 15, 13, 12]
+}
 
+df = pd.DataFrame(data)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# 2. Análisis Estadístico Descriptivo
+media_latencia = df['Tiempo_Respuesta_ms'].mean()
+std_latencia = df['Tiempo_Respuesta_ms'].std()
 
+print(f"--- Análisis Estadístico de Latencia ---")
+print(f"Latencia Promedio: {media_latencia:.2f} ms")
+print(f"Desviación Estándar: {std_latencia:.2f} ms")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# 3. Generación del Gráfico
+plt.figure(figsize=(10, 6))
+plt.plot(df['Distancia_cm'], df['Tiempo_Respuesta_ms'], marker='o', linestyle='-', color='b')
+plt.title('Análisis de Latencia vs Distancia de Objeto (Sistema ESP32-IA)')
+plt.xlabel('Distancia del obstáculo (cm)')
+plt.ylabel('Latencia de respuesta del sistema (ms)')
+plt.grid(True)
+plt.show()
